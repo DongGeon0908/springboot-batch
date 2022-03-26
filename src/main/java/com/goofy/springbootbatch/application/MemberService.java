@@ -4,6 +4,7 @@ import com.goofy.springbootbatch.dto.MemberCreateResponse;
 import com.goofy.springbootbatch.entity.Member;
 import com.goofy.springbootbatch.infrastructure.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MemberService {
@@ -18,6 +20,7 @@ public class MemberService {
 
     @Transactional
     public MemberCreateResponse saveFakeUser(int range) {
+        log.info("[SAVE] saveFakeUser");
         return new MemberCreateResponse(
                 memberRepository.saveAll(
                                 IntStream.range(0, range)
@@ -28,7 +31,9 @@ public class MemberService {
                                                 .build()
                                         ).collect(Collectors.toList())
                         ).stream()
-                        .map(member -> MemberCreateResponse.MemberCreateDetail.builder().build())
+                        .map(member -> {
+                            return MemberCreateResponse.MemberCreateDetail.builder().build();
+                        })
                         .collect(Collectors.toList())
         );
     }
